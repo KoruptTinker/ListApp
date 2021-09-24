@@ -2,11 +2,11 @@ const { Sequelize } = require('sequelize');
 const { QueryTypes } = require('sequelize');
 require('dotenv').config();
 const express = require('express');
-
+const cors=require('cors');
 
 const app=express();
 app.use(express.json());
-
+app.use(cors());
 const sequelize = new Sequelize(`postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:5432/listapp`);
 
 
@@ -15,10 +15,22 @@ app.get("/", (req,res) => {
 });
 
 
-app.get("/listapp/getlists", (req, res) => {
-    sequelize.query("SELECT items.id, description, list, status FROM items INNER JOIN lists ON lists.id=items.list WHERE items.status=false ORDER BY(list) ASC", {type: QueryTypes.SELECT})
+app.get("/listapp/get/items/:id", (req, res) => {
+    const {id}=req.params;
+    sequelize.query(`SELECT * FROM items WHERE list=${id} ORDER BY status`, {type: QueryTypes.SELECT})
     .then(lists => res.status(200).send(lists))
     .catch(err => console.error(err));
+});
+
+
+app.get("/listapp/get/lists", (req, res) => {
+    sequelize.query('SELECT * from lists', {type: QueryTypes.SELECT})
+    .then(lists => {
+        res.status(200).send(lists);
+    })
+    .catch(() => {
+        res.status(404).send("Error");
+    });
 });
 
 

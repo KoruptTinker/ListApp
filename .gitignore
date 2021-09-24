@@ -4,12 +4,11 @@
 logs
 **/*.backup.*
 **/*.back.*
-client
 node_modules
 bower_components
 .env
 *.sublime*
-
+*.ico
 psd
 thumb
 sketch
