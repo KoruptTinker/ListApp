@@ -113,14 +113,12 @@ app.delete("/listapp/remove/task/:id", (req,res) => {
 });
 
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server running on localhost:${process.env.PORT}`);
-
+app.listen(process.env.OLD_PORT, () => {
+    console.log(`Server running on localhost:${process.env.OLD_PORT}`);
     sequelize.authenticate().then(() => {
         console.log('Connection has been established successfully.');
       })
       .catch(err => {
         console.error('Unable to connect to the database:', err);
       });
-
 });

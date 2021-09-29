@@ -8,7 +8,7 @@ const ItemContainer = (props) => {
     const [progress,setProgress] = useState(0);
 
     const fetchItems = async () => {
-        fetch(`http://localhost:8080/listapp/get/items/${props.parent}`)
+        fetch(`http://localhost:8080/items/get/items/${props.parent}`)
         .then(res => res.json())
         .then(data => {
             setItems(data);
@@ -18,7 +18,7 @@ const ItemContainer = (props) => {
 
 
     const calculatePercentage = (itemList) => {
-        if(itemList.length==0){
+        if(itemList.length===0){
             return (100).toFixed(1);
         }
         let total = 0;
@@ -33,7 +33,7 @@ const ItemContainer = (props) => {
 
     const addItem = async () => {
         //Send a POST request to the server
-        let response = await fetch(`http://localhost:8080/listapp/create/task/`, {
+        await fetch(`http://localhost:8080/items/create/task`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -44,7 +44,6 @@ const ItemContainer = (props) => {
                 list: props.parent
             })
         });
-        let json = await response.json();
         fetchItems();
         setInputHolder('');
     }
@@ -52,7 +51,7 @@ const ItemContainer = (props) => {
 
     const deleteItem = async (id) => {
         //Send a DELETE request to the server
-        await fetch(`http://localhost:8080/listapp/remove/task/${id}`, {
+        await fetch(`http://localhost:8080/items/remove/task/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -62,7 +61,7 @@ const ItemContainer = (props) => {
     }
 
     const markComplete = async (id) => {
-        await fetch(`http://localhost:8080/listapp/mark/`,{
+        await fetch(`http://localhost:8080/items/mark`,{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -75,7 +74,7 @@ const ItemContainer = (props) => {
 
 
     const markIncomplete = async (id) => {
-        await fetch(`http://localhost:8080/listapp/unmark/`,{
+        await fetch(`http://localhost:8080/items/unmark`,{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

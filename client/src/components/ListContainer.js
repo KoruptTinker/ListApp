@@ -8,14 +8,14 @@ const ListContainer = (props) =>{
     const [clickMode, setClickMode] = useState(false);
 
     const fetchLists = async() => {
-        let response = await fetch("http://localhost:8080/listapp/get/lists");
+        let response = await fetch("http://localhost:8080/lists/get/lists");
         let json= await response.json();
         setLists(json);
     }
 
 
     const addList = async(name) => {
-        await fetch("http://localhost:8080/listapp/create/list", {
+        await fetch("http://localhost:8080/lists/create/list", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ const ListContainer = (props) =>{
 
 
     const deleteList = async(id) => {
-        await fetch(`http://localhost:8080/listapp/remove/list/${id}`, {
+        await fetch(`http://localhost:8080/lists/remove/list/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
