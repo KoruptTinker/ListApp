@@ -5,11 +5,29 @@ const ItemContainer = (props) => {
     const [items,setItems] = useState([]);
     const [inputHolder, setInputHolder] = useState('');
     const [clickMode, setClickMode] = useState(false);
+    const [progress,setProgress] = useState(0);
 
     const fetchItems = async () => {
-        let response= await fetch(`http://localhost:8080/listapp/get/items/${props.parent}`);
-        let json= await response.json();
-        setItems(json);
+        fetch(`http://localhost:8080/listapp/get/items/${props.parent}`)
+        .then(res => res.json())
+        .then(data => {
+            setItems(data);
+            setProgress(calculatePercentage(data));
+        });
+    }
+
+
+    const calculatePercentage = (itemList) => {
+        if(itemList.length==0){
+            return (100).toFixed(1);
+        }
+        let total = 0;
+        itemList.forEach(item => {
+            if(item.status){
+                total+=1;
+            }
+        });
+        return ((total/itemList.length)*100).toFixed(1);
     }
 
 
@@ -78,6 +96,7 @@ const ItemContainer = (props) => {
         });
         setItems(newItems);
         markIncomplete(id);
+        setTimeout( () => setProgress(calculatePercentage(items), 1000));
     }
     
 
@@ -90,6 +109,7 @@ const ItemContainer = (props) => {
         });
         setItems(newItems);
         markComplete(id);
+        setTimeout( () => setProgress(calculatePercentage(items), 1000));
     }
 
 
@@ -105,6 +125,10 @@ const ItemContainer = (props) => {
 
     return(
         <>
+            {/* {React progress bar} */}
+            <div className='progress-bar'>
+                <div className='progress-bar-inner' style={{width: `${progress}%`}}>{progress}%</div>
+            </div>
             {items.map(list => (
                 list.status ? 
                     <div className="item-card-mark" key={list.id} onClick= { clickMode ? 
